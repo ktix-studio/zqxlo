@@ -2,6 +2,7 @@ from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 from urllib.parse import quote
+import urllib.parse
 
 app = FastAPI()
 
@@ -62,7 +63,6 @@ def search_wiki_summary(q):
 
 def search_youtube(q):
     try:
-        import urllib.parse
         qq = urllib.parse.quote(q)
         url = f"https://vid.puffyan.us/api/v1/search?q={qq}&type=video"
         r = requests.get(url, timeout=8).json()
@@ -82,7 +82,6 @@ def search_youtube(q):
             "link": f"https://www.youtube.com/results?search_query={q}",
             "snippet": f"Watch {q} videos on YouTube",
             "source": "youtube"
-        }] 
         }]
 
 @app.get("/")
@@ -90,7 +89,7 @@ def home():
     return {
         "message": "ZQXLO LIVE - Phase 1 - 4 Sources",
         "sources": "Wikipedia + DuckDuckGo + Wiki Summary + YouTube"
-    } 
+    }
 
 @app.get("/search")
 def search(q: str = Query(..., description="Search query")):
@@ -98,11 +97,12 @@ def search(q: str = Query(..., description="Search query")):
     all_results += search_wikipedia(q)
     all_results += search_duckduckgo(q)
     all_results += search_wiki_summary(q)
-    all_results += search_youtube(q) # NEW!
+    all_results += search_youtube(q)
     
     return {
         "query": q,
         "count": len(all_results),
+        "engine": "ZQXLO Phase-1 | 4 Sources",
         "results": all_results[:8]
     }
 
@@ -113,4 +113,4 @@ def read(url: str):
         text = r.text[:3000]
         return {"url": url, "content": text, "length": len(text)}
     except Exception as e:
-        return {"url": url, "error": str(e)}
+        return {"url": url, "error": str(e)} 
