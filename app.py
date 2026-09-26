@@ -32,7 +32,7 @@ body{background:#080808;color:#fff;min-height:100vh;display:flex;flex-direction:
 </style>
 </head><body>
 <div class="logo">ZQXLO</div>
-<div class="sub">PHASE-1 • 5 SOURCES • LIVE ON ULTIMUS</div>
+<div class="sub" style="display:none"></div>
 <div class="tabs">
 <div class="tab active" id="t-search" onclick="setMode('search')">🔍 Web Search</div>
 <div class="tab" id="t-read" onclick="setMode('read')">🌐 Read Website</div>
