@@ -1,25 +1,111 @@
-# ZQXLO - App Runner
-from core import ZQXLO
+from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
+import requests
+from urllib.parse import quote
 
-def main():
-    print("="*40)
-    print("  ZQXLO ⚡ - AI that connects to everything")
-    print("  Built by ktix-studio | Phase 1")
-    print("="*40)
-    
-    zqx = ZQXLO()
-    
-    # Test 1
-    print("\n--- Test 1: Google Search ---")
-    result = zqx.search_google("Best AI tools 2026")
-    print(result)
-    
-    # Test 2
-    print("\n--- Test 2: URL Reader ---")
-    result2 = zqx.read_url("https://example.com")
-    print(result2)
-    
-    print("\n✅ Phase 1 Complete! ZQXLO is alive!")
+app = FastAPI()
 
-if __name__ == "__main__":
-    main() 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+def search_wikipedia(q):
+    try:
+        url = f"https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch={quote(q)}&format=json"
+        r = requests.get(url, timeout=5).json()
+        results = []
+        for item in r.get("query", {}).get("search", [])[:2]:
+            results.append({
+                "title": item["title"],
+                "link": f"https://en.wikipedia.org/wiki/{item['title'].replace(' ', '_')}",
+                "snippet": item.get("snippet","")[:150],
+                "source": "wikipedia"
+            })
+        return results
+    except:
+        return []
+
+def search_duckduckgo(q):
+    try:
+        url = f"https://api.duckduckgo.com/?q={quote(q)}&format=json&pretty=1"
+        r = requests.get(url, timeout=5).json()
+        results = []
+        for topic in r.get("RelatedTopics", [])[:2]:
+            if "Text" in topic and "FirstURL" in topic:
+                results.append({
+                    "title": topic["Text"][:60],
+                    "link": topic["FirstURL"],
+                    "snippet": topic["Text"][:150],
+                    "source": "duckduckgo"
+                })
+        return results
+    except:
+        return []
+
+def search_wiki_summary(q):
+    try:
+        url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{quote(q)}"
+        r = requests.get(url, timeout=5).json()
+        if "title" in r and "extract" in r:
+            return [{
+                "title": r["title"],
+                "link": r.get("content_urls",{}).get("desktop",{}).get("page",""),
+                "snippet": r["extract"][:200],
+                "source": "wiki-summary"
+            }]
+        return []
+    except:
+        return []
+
+def search_youtube(q):
+    try:
+        # Free Invidious API - no key needed
+        url = f"https://vid.puffyan.us/api/v1/search?q={quote(q)}&type=video"
+        r = requests.get(url, timeout=8).json()
+        results = []
+        for item in r[:2]: # only 2 videos
+            results.append({
+                "title": item.get("title",""),
+                "link": f"https://www.youtube.com/watch?v={item.get('videoId','')}",
+                "snippet": f"Channel: {item.get('author','')} | Views: {item.get('viewCountText','')}",
+                "source": "youtube"
+            })
+        return results
+    except:
+        # fallback - youtube link via duckduckgo
+        return [{
+            "title": f"{q} - YouTube videos",
+            "link": f"https://www.youtube.com/results?search_query={quote(q)}",
+            "snippet": f"Watch {q} videos on YouTube",
+            "source": "youtube"
+        }]
+
+@app.get("/")
+def home():
+    return {"message": "ZQXLO is running - Phase 1 with YouTube", "phase": "1", "sources": ["wikipedia","duckduckgo","wiki-summary","youtube"]}
+
+@app.get("/search")
+def search(q: str = Query(..., description="Search query")):
+    all_results = []
+    all_results += search_wikipedia(q)
+    all_results += search_duckduckgo(q)
+    all_results += search_wiki_summary(q)
+    all_results += search_youtube(q) # NEW!
+    
+    return {
+        "query": q,
+        "count": len(all_results),
+        "results": all_results[:8]
+    }
+
+@app.get("/read")
+def read(url: str):
+    try:
+        r = requests.get(url, timeout=8, headers={"User-Agent":"Mozilla/5.0"})
+        text = r.text[:3000]
+        return {"url": url, "content": text, "length": len(text)}
+    except Exception as e:
+        return {"url": url, "error": str(e)}
