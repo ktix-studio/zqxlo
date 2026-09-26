@@ -62,30 +62,35 @@ def search_wiki_summary(q):
 
 def search_youtube(q):
     try:
-        # Free Invidious API - no key needed
-        url = f"https://vid.puffyan.us/api/v1/search?q={quote(q)}&type=video"
+        import urllib.parse
+        qq = urllib.parse.quote(q)
+        url = f"https://vid.puffyan.us/api/v1/search?q={qq}&type=video"
         r = requests.get(url, timeout=8).json()
         results = []
-        for item in r[:2]: # only 2 videos
+        for item in r[:2]:
+            vid = item.get('videoId','')
             results.append({
-                "title": item.get("title",""),
-                "link": f"https://www.youtube.com/watch?v={item.get('videoId','')}",
-                "snippet": f"Channel: {item.get('author','')} | Views: {item.get('viewCountText','')}",
+                "title": item.get('title',''),
+                "link": f"https://www.youtube.com/watch?v={vid}",
+                "snippet": f"Channel: {item.get('author','')}",
                 "source": "youtube"
             })
         return results
     except:
-        # fallback - youtube link via duckduckgo
         return [{
             "title": f"{q} - YouTube videos",
-            "link": f"https://www.youtube.com/results?search_query={quote(q)}",
+            "link": f"https://www.youtube.com/results?search_query={q}",
             "snippet": f"Watch {q} videos on YouTube",
             "source": "youtube"
+        }] 
         }]
 
 @app.get("/")
 def home():
-    return {"message": "ZQXLO is running - Phase 1 with YouTube", "phase": "1", "sources": ["wikipedia","duckduckgo","wiki-summary","youtube"]}
+    return {
+        "message": "ZQXLO LIVE - Phase 1 - 4 Sources",
+        "sources": "Wikipedia + DuckDuckGo + Wiki Summary + YouTube"
+    } 
 
 @app.get("/search")
 def search(q: str = Query(..., description="Search query")):
