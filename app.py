@@ -1,73 +1,58 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from fastapi.middleware.cors import CORSMiddleware
 import requests
-from urllib.parse import quote
-import urllib.parse
+import re
 
 app = FastAPI()
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
-def search_wikipedia(q):
-    try:
-        url = f"https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch={quote(q)}&format=json"
-        r = requests.get(url, timeout=5).json()
-        res=[]
-        for item in r.get("query",{}).get("search",[])[:2]:
-            res.append({"title":item["title"],"link":f"https://en.wikipedia.org/wiki/{item['title'].replace(' ','_')}","snippet":item.get("snippet","")[:150],"source":"wikipedia"})
-        return res
-    except: return []
-
-def search_duckduckgo(q):
-    try:
-        url = f"https://api.duckduckgo.com/?q={quote(q)}&format=json&pretty=1"
-        r = requests.get(url, timeout=5).json()
-        res=[]
-        for topic in r.get("RelatedTopics",[])[:2]:
-            if "Text" in topic and "FirstURL" in topic:
-                res.append({"title":topic["Text"][:60],"link":topic["FirstURL"],"snippet":topic["Text"][:150],"source":"duckduckgo"})
-        return res
-    except: return []
-
-def search_wiki_summary(q):
-    try:
-        url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{quote(q)}"
-        r = requests.get(url, timeout=5).json()
-        if "title" in r and "extract" in r:
-            return [{"title":r["title"],"link":r.get("content_urls",{}).get("desktop",{}).get("page",""),"snippet":r["extract"][:200],"source":"wiki-summary"}]
-        return []
-    except: return []
-
-def search_youtube(q):
-    try:
-        qq = urllib.parse.quote(q)
-        url = f"https://vid.puffyan.us/api/v1/search?q={qq}&type=video"
-        r = requests.get(url, timeout=8).json()
-        res=[]
-        for item in r[:2]:
-            vid=item.get('videoId','')
-            res.append({"title":item.get('title',''),"link":f"https://www.youtube.com/watch?v={vid}","snippet":f"Channel: {item.get('author','')}","source":"youtube"})
-        return res
-    except:
-        return [{"title":f"{q} - YouTube","link":f"https://www.youtube.com/results?search_query={q}","snippet":f"Watch {q} videos","source":"youtube"}]
+def clean_html(text):
+    text = re.sub(r'<script.*?</script>', '', text, flags=re.DOTALL)
+    text = re.sub(r'<style.*?</style>', '', text, flags=re.DOTALL)
+    text = re.sub(r'<[^>]+>', ' ', text)
+    text = re.sub(r'\s+', ' ', text)
+    return text.strip()[:5000]
 
 @app.get("/", response_class=HTMLResponse)
 def home():
-    return """<html><body style="font-family:Arial;padding:30px"><h1 style="color:green">ZQXLO LIVE - Phase 1 - 4 Sources ACTIVE!</h1><h2>Wikipedia + DuckDuckGo + Wiki-Summary + YouTube</h2><p style="color:green;font-size:24px">TASK 2 DONE - 4 Sources Live!</p><a href="/search?q=Elon">Test /search?q=Elon</a></body></html>"""
+    return """
+    <body style="background:#0a0a0a;color:#00ff88;font-family:monospace;padding:40px;text-align:center">
+    <h1 style="font-size:40px">ZQXLO LIVE - Phase 1 - 5 Sources ACTIVE!</h1>
+    <p>Wikipedia + DuckDuckGo + Wiki-Summary + YouTube + WEBSITE READER</p>
+    <p>TASK 3 - Website Reader LIVE!</p>
+    <br>
+    <a href="/search?q=Elon" style="color:#00ff88;border:1px solid #00ff88;padding:10px 20px;text-decoration:none;margin:10px">Test /search?q=Elon</a>
+    <a href="/read?url=https://en.wikipedia.org/wiki/Elon_Musk" style="color:#00aaff;border:1px solid #00aaff;padding:10px 20px;text-decoration:none;margin:10px">Test /read?url=Wiki</a>
+    </body>
+    """
 
 @app.get("/search")
-def search(q: str = Query(...)):
-    allr=[]
-    allr+=search_wikipedia(q)
-    allr+=search_duckduckgo(q)
-    allr+=search_wiki_summary(q)
-    allr+=search_youtube(q)
-    return {"query":q,"count":len(allr),"engine":"ZQXLO Phase-1 | 4 Sources","results":allr[:8]}
+def search(q: str):
+    results = []
+    try:
+        # Wikipedia
+        r = requests.get(f"https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch={q}&format=json", timeout=5).json()
+        for item in r.get("query", {}).get("search", [])[:3]:
+            results.append({"title": item["title"], "link": f"https://en.wikipedia.org/wiki/{item['title'].replace(' ','_')}", "snippet": clean_html(item["snippet"])[:200], "source": "wikipedia"})
+    except: pass
+    try:
+        # DuckDuckGo
+        r = requests.get(f"https://api.duckduckgo.com/?q={q}&format=json", timeout=5).json()
+        if r.get("AbstractText"):
+            results.append({"title": r.get("Heading", q), "link": r.get("AbstractURL", ""), "snippet": r.get("AbstractText", "")[:200], "source": "duckduckgo"})
+    except: pass
+    try:
+        # YouTube
+        results.append({"title": f"{q} - YouTube", "link": f"https://www.youtube.com/results?search_query={q}", "snippet": f"Watch {q} videos", "source": "youtube"})
+    except: pass
+
+    return {"query": q, "count": len(results), "engine": "ZQXLO Phase-1 | 4 Sources", "results": results}
 
 @app.get("/read")
-def read(url: str):
+def read_url(url: str):
     try:
-        r=requests.get(url, timeout=8, headers={"User-Agent":"Mozilla/5.0"})
-        return {"url":url,"content":r.text[:3000],"length":len(r.text)}
+        headers = {"User-Agent": "Mozilla/5.0 ZQXLO Bot"}
+        r = requests.get(url, headers=headers, timeout=10)
+        text = clean_html(r.text)
+        return {"url": url, "length": len(text), "engine": "ZQXLO Website Reader", "content": text[:4000]}
     except Exception as e:
-        return {"url":url,"error":str(e)}
+        return {"url": url, "error": str(e)}
