@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ZQXLO – Architecture Templates</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ZQXLO offers premium architecture templates for professionals and students. Clean, modern and ready to use." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #050b1a;
+      --bg-soft: #0a1226;
+      --bg-card: #0d1633;
+      --text: #e5e7eb;
+      --text-muted: #9aa3b2;
+      --primary: #3b82f6;
+      --primary-2: #2563eb;
+      --accent: #60a5fa;
+      --border: rgba(148, 163, 184, 0.18);
+      --shadow: 0 10px 30px rgba(2, 6, 23, 0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: linear-gradient(180deg, var(--bg), #020617);
+      color: var(--text);
+      font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: 100%;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      background: rgba(5, 11, 26, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      color: #fff;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: #fff;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #fff;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.5);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .btn-outline:hover {
+      border-color: rgba(148, 163, 184, 0.35);
+      background: rgba(148, 163, 184, 0.06);
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding-top: 70px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(900px 500px at 10% -10%, rgba(59,130,246,0.18), transparent),
+        radial-gradient(900px 500px at 90% 0%, rgba(37,99,235,0.15), transparent);
+      filter: blur(20px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 860px;
+      padding: 40px 24px 80px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #bfdbfe;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5.5vw, 3rem);
+      line-height: 1.08;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.3vw, 1.12rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      max-width: 660px;
+      margin: 0 auto 26px;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-sub {
+      margin-top: 28px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Sections */
+    section {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+      background: transparent;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-title h2 {
+      font-size: clamp(1.5rem, 3.8vw, 2.2rem);
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: #fff;
+      letter-spacing: -0.015em;
+    }
+
+    .section-title p {
+      color: var(--text-muted);
+      font-weight: 600;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+
+    .card {
+      grid-column: span 12;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      transition: transform 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 36px rgba(2, 6, 23, 0.6);
+      border-color: rgba(148, 163, 184, 0.35);
+    }
+
+    @media (min-width: 768px) {
+      .card-4 { grid-column: span 4; }
+      .card-6 { grid-column: span 6; }
+    }
+
+    .card h3 {
+      font-size: 1.12rem;
+      margin-bottom: 8px;
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      font-weight: 600;
+    }
+
+    .icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 12px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #bfdbfe;
+      font-weight: 800;
+      font-size: 1rem;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0 60px;
+      background: rgba(5, 11, 26, 0.7);
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .footer-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+
+    .footer-col {
+      grid-column: span 12;
+    }
+
+    @media (min-width: 768px) {
+      .footer-col { grid-column: span 4; }
+    }
+
+    .footer-col h4 {
+      color: #fff;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 6px; }
+    .footer-col a:hover { color: #fff; }
+
+    .copyright {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav">
+      <div class="logo">ZQXLO<span>.</span></div>
+      <nav class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="templates.html">Templates</a>
+        <a href="features.html">Features</a>
+        <a href="contact.html">Contact</a>
+        <a href="templates.html" class="btn btn-primary">Browse Templates</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-content">
+      <div class="eyebrow">
+        <span>Architecture Templates by You</span>
+      </div>
+      <h1>Premium architecture templates for modern creators</h1>
+      <p>
+        ZQXLO offers clean, professional and ready‑to‑use architecture templates for students, architects and designers. Save time, stay consistent and focus on design.
+      </p>
+      <div class="hero-cta">
+        <a href="templates.html" class="btn btn-primary">View all templates</a>
+        <a href="features.html" class="btn btn-outline">See features</a>
+      </div>
+      <div class="hero-sub">
+        Built with care. Updated regularly. Made for real projects.
+      </div>
+    </div>
+  </section>
+
+  <!-- Features preview -->
+  <section id="features-preview">
+    <div class="container">
+      <div class="section-title">
+        <h2>Why ZQXLO templates</h2>
+        <p>Designed to be practical, flexible and easy to customize for your projects.</p>
+      </div>
+
+      <div class="grid">
+        <div class="card card-4">
+          <div class="icon-box">A</div>
+          <h3>Clean structure</h3>
+          <p>Well‑organized layers, blocks and components for quick editing.</p>
+        </div>
+
+        <div class="card card-4">
+          <div class="icon-box">S</div>
+          <h3>Scalable layouts</h3>
+          <p>Templates that work for small studios and large firms alike.</p>
+        </div>
+
+        <div class="card card-4">
+          <div class="icon-box">F</div>
+          <h3>Easy to customize</h3>
+          <p>Change colors, fonts and layouts without breaking the design.</p>
+        </div>
+
+        <div class="card card-4">
+          <div class="icon-box">P</div>
+          <h3>Production ready</h3>
+          <p>Export‑friendly setups for presentations, portfolios and client work.</p>
+        </div>
+
+        <div class="card card-4">
+          <div class="icon-box">C</div>
+          <h3>Consistent style</h3>
+          <p>Unified visual language across all templates in the pack.</p>
+        </div>
+
+        <div class="card card-4">
+          <div class="icon-box">U</div>
+          <h3>Regular updates</h3>
+          <p>New templates and improvements added over time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="logo" style="margin-bottom:10px;">ZQXLO<span>.</span></div>
+          <p>
+            Premium architecture templates for professionals and students.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Site</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="templates.html">Templates</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="contact.html">Get in touch</a></li>
+            <li><a href="mailto:kabitlego0@gmail.com">kabitlego0@gmail.com</a></li>
+            <li><a href="tel:+918131861802">+91 81318 61802</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="copyright">
+        © 2026 ZQXLO. All rights reserved. Built by you.
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
