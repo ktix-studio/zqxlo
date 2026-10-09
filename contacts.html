@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact – ZQXLO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #050b1a;
+      --bg-soft: #0a1226;
+      --bg-card: #0d1633;
+      --text: #e5e7eb;
+      --text-muted: #9aa3b2;
+      --primary: #3b82f6;
+      --primary-2: #2563eb;
+      --accent: #60a5fa;
+      --border: rgba(148, 163, 184, 0.18);
+      --shadow: 0 10px 30px rgba(2, 6, 23, 0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      background: linear-gradient(180deg, var(--bg), #020617);
+      color: var(--text);
+      font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container {
+      width: 100%;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      background: rgba(5, 11, 26, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      color: #fff;
+    }
+    .logo span { color: var(--accent); }
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+
+    .page-header {
+      padding: 120px 0 60px;
+      text-align: center;
+    }
+    .page-header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .page-header p {
+      color: var(--text-muted);
+      font-weight: 600;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    section { padding: 40px 0 80px; }
+
+    .contact-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+
+    .card {
+      grid-column: span 12;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+    @media (min-width: 768px) {
+      .card-6 { grid-column: span 6; }
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+      color: #fff;
+      font-weight: 800;
+    }
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      font-weight: 600;
+    }
+
+    .contact-list {
+      list-style: none;
+      margin-top: 10px;
+    }
+    .contact-list li {
+      margin-bottom: 8px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .contact-list a {
+      color: var(--text);
+      font-weight: 700;
+    }
+    .contact-list a:hover {
+      color: var(--accent);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0 60px;
+      background: rgba(5, 11, 26, 0.7);
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+    .footer-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    .footer-col { grid-column: span 12; }
+    @media (min-width: 768px) {
+      .footer-col { grid-column: span 4; }
+    }
+    .footer-col h4 {
+      color: #fff;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 6px; }
+    .footer-col a:hover { color: #fff; }
+    .copyright {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container nav">
+      <div class="logo">ZQXLO<span>.</span></div>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="templates.html">Templates</a>
+        <a href="features.html">Features</a>
+        <a href="contact.html" class="active">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>Contact</h1>
+      <p>Have questions or want to collaborate? Reach out below.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="contact-grid">
+        <div class="card card-6">
+          <h3>Get in touch</h3>
+          <p>Use any of these channels to contact me about templates, custom work or collaborations.</p>
+          <ul class="contact-list">
+            <li>Email: <a href="mailto:kabitlego0@gmail.com">kabitlego0@gmail.com</a></li>
+            <li>Phone / WhatsApp: <a href="tel:+918131861802">+91 81318 61802</a></li>
+          </ul>
+        </div>
+
+        <div class="card card-6">
+          <h3>Work with me</h3>
+          <p>I can help with:</p>
+          <ul class="contact-list">
+            <li>Custom template design for your studio</li>
+            <li>Portfolio and case study layouts</li>
+            <li>Brand kits for architects and designers</li>
+            <li>Social media templates for your projects</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="logo" style="margin-bottom:10px;">ZQXLO<span>.</span></div>
+          <p>Premium architecture templates for professionals and students.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Site</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="templates.html">Templates</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="contact.html">Get in touch</a></li>
+            <li><a href="mailto:kabitlego0@gmail.com">kabitlego0@gmail.com</a></li>
+            <li><a href="tel:+918131861802">+91 81318 61802</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        © 2026 ZQXLO. All rights reserved. Built by you.
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
